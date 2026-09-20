@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gascode Market Research Survey</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #f4f7f6; margin: 0; padding: 16px; color: #333; }
+    .card { background: #ffffff; border-radius: 12px; padding: 20px; max-width: 500px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    h2 { color: #0d5c3a; margin-top: 0; font-size: 1.3rem; }
+    p { font-size: 0.95rem; color: #555; }
+    .form-group { margin-bottom: 18px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.9rem; }
+    select, input[type="text"], input[type="number"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+    .hidden { display: none; }
+    .btn { width: 100%; background: #0d5c3a; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    .btn:hover { background: #094229; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Gascode Market Research</h2>
+  <p>Piped & Smart Metered Cooking Gas Survey</p>
+
+  <form id="surveyForm" action="https://formspree.io/f/your_form_id" method="POST">
+    
+    <!-- Screening -->
+    <div id="sec-screening">
+      <div class="form-group">
+        <label for="city">1. Which city do you live or work in?</label>
+        <select id="city" name="city" required onchange="checkCity()">
+          <option value="">Select city...</option>
+          <option value="Lagos">Lagos</option>
+          <option value="Abuja">Abuja (FCT)</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="role">2. Which best describes you?</label>
+        <select id="role" name="role" required onchange="routeRole()">
+          <option value="">Select option...</option>
+          <option value="Resident">Homeowner / Renter / Estate Resident</option>
+          <option value="Business">Small Business / Shop Owner</option>
+          <option value="B2B">Facility Manager / Real Estate Developer</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- B2C Consumer Track -->
+    <div id="sec-b2c" class="hidden">
+      <div class="form-group">
+        <label for="spend">Estimated monthly spend on cooking gas (₦):</label>
+        <input type="number" id="spend" name="monthly_spend" placeholder="e.g. 15000">
+      </div>
+      <div class="form-group">
+        <label for="refill">How often do you run out of gas unexpectedly?</label>
+        <select name="out_of_gas_frequency">
+          <option value="Never">Never</option>
+          <option value="Once">Once every few months</option>
+          <option value="Frequently">Frequently</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- B2B Infrastructure Track -->
+    <div id="sec-b2b" class="hidden">
+      <div class="form-group">
+        <label for="units">Number of housing/commercial units managed:</label>
+        <input type="number" id="units" name="managed_units" placeholder="e.g. 50">
+      </div>
+      <div class="form-group">
+        <label for="model">Preferred financing model:</label>
+        <select name="commercial_model">
+          <option value="Outsourced">Build-Operate-Transfer</option>
+          <option value="RevenueShare">Revenue Share</option>
+          <option value="DirectPurchase">Direct Purchase/Contractor</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="sec-submit" class="hidden">
+      <button type="submit" class="btn">Submit Survey</button>
+    </div>
+
+    <div id="sec-terminated" class="hidden">
+      <p style="color: #c0392b;">Thank you for your time! Currently, this survey is only open to residents and operators in Lagos and Abuja.</p>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  function checkCity() {
+    const city = document.getElementById('city').value;
+    if (city === 'Other') {
+      document.getElementById('sec-b2c').classList.add('hidden');
+      document.getElementById('sec-b2b').classList.add('hidden');
+      document.getElementById('sec-submit').classList.add('hidden');
+      document.getElementById('sec-terminated').classList.remove('hidden');
+    } else {
+      document.getElementById('sec-terminated').classList.add('hidden');
+      routeRole();
+    }
+  }
+
+  function routeRole() {
+    const city = document.getElementById('city').value;
+    const role = document.getElementById('role').value;
+
+    if (!city || city === 'Other' || !role) return;
+
+    if (role === 'B2B') {
+      document.getElementById('sec-b2c').classList.add('hidden');
+      document.getElementById('sec-b2b').classList.remove('hidden');
+    } else {
+      document.getElementById('sec-b2b').classList.add('hidden');
+      document.getElementById('sec-b2c').classList.remove('hidden');
+    }
+    document.getElementById('sec-submit').classList.remove('hidden');
+  }
+</script>
+
+</body>
+</html>
